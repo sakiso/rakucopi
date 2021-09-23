@@ -2,6 +2,7 @@
 
 {
   //拡張機能インストール時、コンテキストメニューに当拡張機能の欄を追加
+  //TODO_ページTitleを取得する欄と機能も追加する
   chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
       id: 'copy_mdurl',
@@ -12,12 +13,15 @@
 
   // コンテキストメニュークリック時に以下が実行される
   chrome.contextMenus.onClicked.addListener((info) => {
+    console.log(info)
     const selectedText = getSelectedText(info)
     const pageUrl = getUrl(info)
     const markdownText = convertUrlToMarkdown({
       title: selectedText,
       url: pageUrl,
     })
+
+    writeTextToClipboard('aaa')
 
     console.log(markdownText)
   })
@@ -38,5 +42,15 @@
   function convertUrlToMarkdown({ title, url }) {
     const markdownText = '[' + title + ']' + '(' + url + ')'
     return markdownText
+  }
+
+  //与えられた文字列をクリップボードに書き込む
+  function writeTextToClipboard(text) {
+    navigator.clipboard
+      .writeText(text)
+      .then()
+      .catch((err) => {
+        console.log(err)
+      })
   }
 }
