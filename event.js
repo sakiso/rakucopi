@@ -32,7 +32,7 @@ function getUrl(info) {
 }
 
 //タイトルとURLをマークダウン記法に変換して出力する
-function convertUrlToMarkdown({ title, url }) {
+function convertUrlToMarkdown({ title = '', url = '' }) {
   return '[' + title + ']' + '(' + url + ')'
 }
 
