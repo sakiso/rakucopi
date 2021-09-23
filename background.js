@@ -36,7 +36,7 @@
 
   //タイトルとURLをマークダウン記法に変換して出力する
   function convertUrlToMarkdown({ title, url }) {
-    const markdown = '[' + title + ']' + '(' + url + ')'
-    return markdown
+    const markdownText = '[' + title + ']' + '(' + url + ')'
+    return markdownText
   }
 }
