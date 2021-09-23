@@ -1,7 +1,7 @@
 'use strict'
 
 {
-  //コンテキストメニューに当拡張機能の欄を追加
+  //拡張機能インストール時、コンテキストメニューに当拡張機能の欄を追加
   chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
       id: 'copy_mdurl',
@@ -10,13 +10,19 @@
     })
   })
 
+  // コンテキストメニュークリック時に以下が実行される
   chrome.contextMenus.onClicked.addListener((info) => {
-    // コンテキストメニュークリック時に以下が実行される
-    getSelectedText(info)
-    getUrl(info)
-    console.log('text:', getSelectedText(info), 'url:', getUrl(info))
+    const selectedText = getSelectedText(info)
+    const pageUrl = getUrl(info)
+    const markdownText = convertUrlToMarkdown({
+      title: selectedText,
+      url: pageUrl,
+    })
+
+    console.log(markdownText)
   })
 
+  //-----以下関数エリア-----
   //選択した文字列を取得し出力する
   function getSelectedText(info) {
     const selectedText = info.selectionText || '' //画面上何も選択されていない場合selectionTextはundefinedになる
@@ -28,5 +34,9 @@
     return info.pageUrl
   }
 
-  //入力された文字列とURLをマークダウン記法に変換して出力する関数
+  //タイトルとURLをマークダウン記法に変換して出力する
+  function convertUrlToMarkdown({ title, url }) {
+    const markdown = '[' + title + ']' + '(' + url + ')'
+    return markdown
+  }
 }
