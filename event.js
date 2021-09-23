@@ -16,14 +16,21 @@ chrome.runtime.onInstalled.addListener(() => {
 // コンテキストメニュークリック時に以下が実行される
 chrome.contextMenus.onClicked.addListener((info) => {
   //TODO_押されたメニューのIDを受け取って処理を分岐させる
-  const selectedText = getSelectedText(info)
-  const pageUrl = getUrl(info)
-  const markdownText = convertUrlToMarkdown({
-    title: selectedText,
-    url: pageUrl,
-  })
+  switch (info.menuItemId) {
+    case 'copy_mdurl':
+      const selectedText = getSelectedText(info)
+      const pageUrl = getUrl(info)
+      const markdownText = convertUrlToMarkdown({
+        title: selectedText,
+        url: pageUrl,
+      })
+      writeTextToClipboard(markdownText)
+      break
 
-  writeTextToClipboard(markdownText)
+    case 'copy_mdquote':
+      console.log('md quote')
+      break
+  }
 })
 
 //-----以下関数エリア-----
