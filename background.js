@@ -1,27 +1,32 @@
-'use strict';
+'use strict'
 
 {
   //コンテキストメニューに当拡張機能の欄を追加
   chrome.runtime.onInstalled.addListener(() => {
-    //拡張機能のインストール・更新の際に呼ばれる。ブラウザを閉じても残る。
-    const parent = chrome.contextMenus.create({
+    chrome.contextMenus.create({
       id: 'copy_mdurl',
       title: 'URLコピー(Markdown)',
       contexts: ['all'],
-    });
-  });
+    })
+  })
 
-  // コンテキストメニュークリック時に実行する処理
   chrome.contextMenus.onClicked.addListener((info) => {
-    getText(info);
-    getUrl();
-  });
+    // コンテキストメニュークリック時に以下が実行される
+    getSelectedText(info)
+    getUrl(info)
+    console.log('text:', getSelectedText(info), 'url:', getUrl(info))
+  })
 
-  function getText(info) {
-    console.log('get text', info.selectionText);
+  //選択した文字列を取得し出力する
+  function getSelectedText(info) {
+    const selectedText = info.selectionText || '' //画面上何も選択されていない場合selectionTextはundefinedになる
+    return selectedText
   }
 
-  function getUrl() {
-    console.log('get url');
+  //ページのURLを取得し出力する
+  function getUrl(info) {
+    return info.pageUrl
   }
+
+  //入力された文字列とURLをマークダウン記法に変換して出力する関数
 }
