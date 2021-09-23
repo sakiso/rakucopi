@@ -40,13 +40,6 @@ function convertUrlToMarkdown({ title, url }) {
 
 //与えられた文字列をクリップボードに書き込む
 function writeTextToClipboard(text) {
-  navigator.clipboard
-    .writeText(text)
-    .then()
-    .catch((err) => {
-      console.log(err)
-    })
-
   // 対象のタブのidを取得し、content scriptにメッセージを送ってクリップボードに書き込みさせる
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const message = { type: 'write to clipboard', content: text }
