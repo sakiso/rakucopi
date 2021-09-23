@@ -3,13 +3,19 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'copy_mdurl',
-    title: 'MdCopy!(URL&Text)',
+    title: 'MdCopy!(URL,Text)',
     contexts: ['all'],
+  })
+  chrome.contextMenus.create({
+    id: 'copy_mdquote',
+    title: 'MdCopy!(Quote)',
+    contexts: ['selection'],
   })
 })
 
 // コンテキストメニュークリック時に以下が実行される
 chrome.contextMenus.onClicked.addListener((info) => {
+  //TODO_押されたメニューのIDを受け取って処理を分岐させる
   const selectedText = getSelectedText(info)
   const pageUrl = getUrl(info)
   const markdownText = convertUrlToMarkdown({
