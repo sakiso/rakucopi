@@ -17,11 +17,14 @@
   ],
   "permissions": ["activeTab", "contextMenus"],
 
-  "action": {
-    "default_icon": {
-      "16": "icon/MdCopy_icon16.png",
-      "24": "icon/MdCopy_icon24.png",
-      "32": "icon/MdCopy_icon32.png"
-    }
+  "icons": {
+    "16": "icon/MdCopy_icon16.png",
+    "24": "icon/MdCopy_icon24.png",
+    "32": "icon/MdCopy_icon32.png",
+    "48": "icon/MdCopy_icon32.png"
+  },
+
+  "browser_action": {
+    "default_icon": {}
   }
 }
