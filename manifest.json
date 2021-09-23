@@ -5,9 +5,12 @@
   "description": "URLを加工してコピーし、マークダウン記法の文書に貼り付けやすいようにする",
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["event.js"],
     "persistent": false
   },
 
+  "content_script": {
+    "js": ["content.js"]
+  },
   "permissions": ["activeTab", "contextMenus"]
 }
