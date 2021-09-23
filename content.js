@@ -1,6 +1,6 @@
-'use strict'
-chrome.runtime.onMessage.addListener(function (message) {
+chrome.runtime.onMessage.addListener((tabId, message) => {
   if (message.type === 'write to clipboard') {
+    console.log('content:', tabId, message)
     navigator.clipboard
       .writeText(message.content)
       .then()

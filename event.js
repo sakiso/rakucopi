@@ -52,8 +52,12 @@
       .catch((err) => {
         console.log(err)
       })
-    //content scriptにメッセージを送ってクリップボードに書き込みさせる
-    const message = { type: 'write to clipboard', content: text }
-    chrome.tabs.sendMessage(1, message, null)
+
+    // 対象のタブのidを取得し、content scriptにメッセージを送ってクリップボードに書き込みさせる
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      console.log(tabs[0].id)
+      const message = { type: 'write to clipboard', content: text }
+      chrome.tabs.sendMessage(tabs[0].id, message)
+    })
   }
 }
