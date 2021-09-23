@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "rakucopi_url",
+  "name": "MdCopy",
   "version": "1.0.0",
   "description": "URLを加工してコピーし、マークダウン記法の文書に貼り付けやすいようにする",
 
