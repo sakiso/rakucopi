@@ -10,6 +10,7 @@
   },
 
   "content_script": {
+    "matches": ["<all_urls>"],
     "js": ["content.js"]
   },
   "permissions": ["activeTab", "contextMenus"]

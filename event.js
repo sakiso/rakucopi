@@ -14,7 +14,6 @@
 
   // コンテキストメニュークリック時に以下が実行される
   chrome.contextMenus.onClicked.addListener((info) => {
-    console.log(info)
     const selectedText = getSelectedText(info)
     const pageUrl = getUrl(info)
     const markdownText = convertUrlToMarkdown({
@@ -22,7 +21,7 @@
       url: pageUrl,
     })
 
-    writeTextToClipboard('aaa')
+    writeTextToClipboard(markdownText)
 
     console.log(markdownText)
   })
@@ -53,5 +52,8 @@
       .catch((err) => {
         console.log(err)
       })
+    //content scriptにメッセージを送ってクリップボードに書き込みさせる
+    const message = { type: 'write to clipboard', content: text }
+    chrome.tabs.sendMessage(1, message, null)
   }
 }
