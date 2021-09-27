@@ -11,6 +11,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break
     case 'get selected text include newline-code':
       console.log('content_quote')
-      sendResponse({ response: 'quote success!' })
+      sendResponse({ response: window.getSelection().toString() })
   }
 })
