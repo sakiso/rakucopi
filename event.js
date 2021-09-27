@@ -71,8 +71,9 @@ function getSelectedTextIncludeNewlineCode() {
     const message = {
       type: 'get selected text include newline-code',
     }
-    chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
-      console.log(response)
+    chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
+      const quotedText = await response
+      console.log(quotedText)
     })
   })
 }
