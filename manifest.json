@@ -15,7 +15,7 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": ["activeTab", "contextMenus"],
+  "permissions": ["contextMenus"],
 
   "icons": {
     "16": "icon/MdCopy_icon16.png",
