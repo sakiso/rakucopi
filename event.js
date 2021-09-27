@@ -56,6 +56,7 @@ function convertUrlToMarkdown({ title = '', url = '' }) {
 function writeTextToClipboard(text) {
   // 対象のタブのidを取得しcontent script側でクリップボードに書き込みさせる
   // navigator.clipboardは、Background側で使えないバグがあるため
+  // TODO_ActiveTab権限を無効にしても動いたので各引数が必要か、もう一度ちゃんと考える必要あり
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const message = { type: 'write to clipboard', content: text }
     chrome.tabs.sendMessage(tabs[0].id, message)
@@ -70,8 +71,7 @@ function getSelectedTextIncludeNewlineCode() {
     const message = {
       type: 'get selected text include newline-code',
     }
-    chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
-      await response
+    chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
       console.log(response)
     })
   })
