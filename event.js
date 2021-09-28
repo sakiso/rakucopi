@@ -67,25 +67,29 @@ function writeTextToClipboard(text) {
   })
 }
 
+//FIXME_selectedTextの取得自体はうまく出来てるので、流れを整理する
+
 //改行を含む選択文字列を取得する
 async function getSelectedTextIncludeNewlineCode() {
-  // 対象のタブのidを取得しcontent script側で改行を含む選択文字列を取得する
-  // selectionTextは、改行を空白に変換するため使えない
-  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+  async function messaging(tabs) {
     const message = {
       type: 'get selected text include newline-code',
     }
-    const ret = await chrome.tabs.sendMessage(
-      tabs[0].id,
-      message,
-      async (response) => {
-        const selectedText = await response
-        console.log('res', selectedText)
-        const wk = selectedText
-        console.log('wk', wk)
-        return true
-      }
-    )
+
+    let wkret = 'init'
+    await chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
+      const selectedText = await response
+      console.log('res', selectedText)
+      wkret = selectedText
+    })
+    console.log('wkret', wkret)
+    return wkret
+  }
+
+  // 対象のタブのidを取得しcontent script側で改行を含む選択文字列を取得する
+  // selectionTextは、改行を空白に変換するため使えない
+  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+    const ret = await messaging(tabs)
     console.log('ret', ret)
     return true
   })
