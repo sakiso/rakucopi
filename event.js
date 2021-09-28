@@ -27,11 +27,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
       break
 
     case 'copy_mdquote':
-      console.log('md quote')
-      //TODO_message passing
-      getSelectedTextIncludeNewlineCode()
-      //TODO_callbackで改行含む文字列を取得して
-      //行頭(1文字目と各改行コードの直後)に”>”を追加する
+      getQuotedTextIncludeNewlineCode()
       break
   }
 })
@@ -54,8 +50,7 @@ function convertUrlToMarkdown({ title = '', url = '' }) {
 
 //与えられた文字列をクリップボードに書き込む
 function writeTextToClipboard(text) {
-  // 対象のタブのidを取得しcontent script側でクリップボードに書き込みさせる
-  // navigator.clipboardは、Background側で使えないバグがあるため
+  // navigator.clipboardはBackground側で使えないバグがあるため、content側でクリップボードに書き込みさせる
   // TODO_ActiveTab権限を無効にしても動いたので各引数が必要か、もう一度ちゃんと考える必要あり
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const message = { type: 'write to clipboard', content: text }
@@ -63,20 +58,15 @@ function writeTextToClipboard(text) {
   })
 }
 
-//TODO_同期処理がどうやってもうまくいかんので、CONTENT側で”>”を付与し
-//writeTextしてしまうか…
-
-//改行を含む選択文字列を取得する
-function getSelectedTextIncludeNewlineCode() {
-  // 対象のタブのidを取得しcontent script側で改行を含む選択文字列を取得する
-  // selectionTextは、改行を空白に変換するため
+//">"が編集され改行を含む文字列を取得する
+function getQuotedTextIncludeNewlineCode() {
+  // selectionTextは改行を空白に変換してしまうためcontent script側でwindow.getSelection()を使う
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const message = {
       type: 'get selected text include newline-code',
     }
     chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
       const quotedText = await response.body
-      console.log(quotedText)
       writeTextToClipboard(quotedText)
     })
   })
