@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(() => {
 })
 
 // コンテキストメニュークリック時に以下が実行される
-chrome.contextMenus.onClicked.addListener((info) => {
+chrome.contextMenus.onClicked.addListener(async (info) => {
   switch (info.menuItemId) {
     case 'copy_mdurl':
       const selectedText = getSelectedText(info)
@@ -29,9 +29,13 @@ chrome.contextMenus.onClicked.addListener((info) => {
     case 'copy_mdquote':
       console.log('md quote')
       //TODO_message passing
-      getSelectedTextIncludeNewlineCode()
+      const selectedTextIncludeNewlineCode =
+        await getSelectedTextIncludeNewlineCode()
+      //FIXME_同期処理にならない！！！
+      console.log('copy', selectedTextIncludeNewlineCode)
       //TODO_callbackで改行含む文字列を取得して
       //行頭(1文字目と各改行コードの直後)に”>”を追加する
+      writeTextToClipboard(selectedTextIncludeNewlineCode)
       break
   }
 })
@@ -64,16 +68,26 @@ function writeTextToClipboard(text) {
 }
 
 //改行を含む選択文字列を取得する
-function getSelectedTextIncludeNewlineCode() {
+async function getSelectedTextIncludeNewlineCode() {
   // 対象のタブのidを取得しcontent script側で改行を含む選択文字列を取得する
-  // selectionTextは、改行を空白に変換するため
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  // selectionTextは、改行を空白に変換するため使えない
+  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const message = {
       type: 'get selected text include newline-code',
     }
-    chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
-      const quotedText = await response
-      console.log(quotedText)
-    })
+    const ret = await chrome.tabs.sendMessage(
+      tabs[0].id,
+      message,
+      async (response) => {
+        const selectedText = await response
+        console.log('res', selectedText)
+        const wk = selectedText
+        console.log('wk', wk)
+        return true
+      }
+    )
+    console.log('ret', ret)
+    return true
   })
+  return 'true2'
 }
