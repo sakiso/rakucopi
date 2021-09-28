@@ -63,6 +63,9 @@ function writeTextToClipboard(text) {
   })
 }
 
+//TODO_同期処理がどうやってもうまくいかんので、CONTENT側で”>”を付与し
+//writeTextしてしまうか…
+
 //改行を含む選択文字列を取得する
 function getSelectedTextIncludeNewlineCode() {
   // 対象のタブのidを取得しcontent script側で改行を含む選択文字列を取得する
@@ -72,8 +75,9 @@ function getSelectedTextIncludeNewlineCode() {
       type: 'get selected text include newline-code',
     }
     chrome.tabs.sendMessage(tabs[0].id, message, async (response) => {
-      const quotedText = await response
+      const quotedText = await response.body
       console.log(quotedText)
+      writeTextToClipboard(quotedText)
     })
   })
 }
